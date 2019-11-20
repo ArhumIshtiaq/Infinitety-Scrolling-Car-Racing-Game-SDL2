@@ -11,4 +11,4 @@ class Button
     void click(SDL_Rect*);
     void hover();
     void setText(string);
-}
+};

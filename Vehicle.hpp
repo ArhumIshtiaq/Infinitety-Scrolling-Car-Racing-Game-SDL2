@@ -7,4 +7,4 @@ class Vehicle
     public:
         SDL_Image sprite;
         int lane;
-}
+};

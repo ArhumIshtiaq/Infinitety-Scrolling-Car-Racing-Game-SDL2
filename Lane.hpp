@@ -8,4 +8,4 @@ class Lane
         void addCar();
         void removeCar();
         void move();
-}
+};
