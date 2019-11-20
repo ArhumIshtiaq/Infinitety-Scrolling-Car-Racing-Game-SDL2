@@ -4,5 +4,5 @@ class Traffic
 {
     float speed;
     void increaseSpawnSpeed();
-    void decreaseSpawnSpeed()
+    void decreaseSpawnSpeed();
 };
