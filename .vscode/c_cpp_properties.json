@@ -1,0 +1,29 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "C://SDL2-2.0.10//x86_64-w64-mingw32//include//SDL2",
+                "C://SDL2_image-2.0.5//x86_64-w64-mingw32//include//SDL2",
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "C://mingw-w64//x86_64-8.1.0-posix-seh-rt_v6-rev0//mingw64//bin//g++.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "C://SDL2-2.0.10//x86_64-w64-mingw32//include//SDL2",
+                    "C://SDL2_image-2.0.5//x86_64-w64-mingw32//include//SDL2",
+                    "${workspaceFolder}/**"
+                ]
+            }
+        }
+    ],
+    "version": 4
+}

@@ -1,0 +1,39 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "g++",
+            "args": [
+                "-g",
+                // "*.cpp",
+                // "main2.cpp",
+                "main.cpp",
+                "Rect.cpp",
+                "Line.cpp",
+                "Shape.cpp",
+                "-I",
+                "C://SDL2-2.0.10//x86_64-w64-mingw32//include//SDL2",
+                "-I",
+                "C://SDL2_image-2.0.5//x86_64-w64-mingw32//include//SDL2",
+                "-L",
+                "C://SDL2-2.0.10//x86_64-w64-mingw32//lib",
+                "-L",
+                "C://SDL2_image-2.0.5//x86_64-w64-mingw32//lib",
+                "-lmingw32",
+                "-lSDL2main",
+                "-lSDL2",
+                "-lopengl32",
+                "-lSDL2_image"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$gcc"
+        }
+    ]
+}
