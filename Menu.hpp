@@ -6,6 +6,6 @@ class Menu
 {
     public:
         SDL_Image* background;
-        void click(SDL_Render*);
+        void click(SDL_Renderer*);
         void show(SDL_Image*);
 };
