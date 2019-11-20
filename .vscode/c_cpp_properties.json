@@ -3,8 +3,6 @@
         {
             "name": "Win32",
             "includePath": [
-                "C://SDL2-2.0.10//x86_64-w64-mingw32//include//SDL2",
-                "C://SDL2_image-2.0.5//x86_64-w64-mingw32//include//SDL2",
                 "${workspaceFolder}/**"
             ],
             "defines": [
@@ -12,17 +10,11 @@
                 "UNICODE",
                 "_UNICODE"
             ],
-            "compilerPath": "C://mingw-w64//x86_64-8.1.0-posix-seh-rt_v6-rev0//mingw64//bin//g++.exe",
+            "windowsSdkVersion": "10.0.17763.0",
+            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/bin/Hostx64/x64/cl.exe",
             "cStandard": "c11",
             "cppStandard": "c++17",
-            "intelliSenseMode": "clang-x64",
-            "browse": {
-                "path": [
-                    "C://SDL2-2.0.10//x86_64-w64-mingw32//include//SDL2",
-                    "C://SDL2_image-2.0.5//x86_64-w64-mingw32//include//SDL2",
-                    "${workspaceFolder}/**"
-                ]
-            }
+            "intelliSenseMode": "msvc-x64"
         }
     ],
     "version": 4
