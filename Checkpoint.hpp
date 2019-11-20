@@ -2,8 +2,9 @@
 
 class Checkpoint
 {
-    float distance;
-    int checkpointNo;
-    void updateCheckpoint();
-    bool checkpointReached();
+    public:
+        float distance;
+        int checkpointNo;
+        void updateCheckpoint();
+        bool checkpointReached();
 };

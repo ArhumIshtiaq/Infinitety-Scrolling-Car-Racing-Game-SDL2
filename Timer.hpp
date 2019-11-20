@@ -2,7 +2,8 @@
 
 class Timer
 {
-    float timeLeft;
-    bool isEnded;
-    void setTimer();
+    public:
+        float timeLeft;
+        bool isEnded;
+        void setTimer();
 };

@@ -4,6 +4,7 @@
 
 class Vehicle
 {
-    SDL_image sprite;
-    int lane;
+    public:
+        // SDL_image sprite;
+        int lane;
 }

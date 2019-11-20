@@ -2,7 +2,8 @@
 
 class Traffic
 {
-    float speed;
-    void increaseSpawnSpeed();
-    void decreaseSpawnSpeed();
+    public:
+        float speed;
+        void increaseSpawnSpeed();
+        void decreaseSpawnSpeed();
 };
