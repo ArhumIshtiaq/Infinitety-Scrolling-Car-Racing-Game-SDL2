@@ -5,6 +5,6 @@
 class Vehicle
 {
     public:
-        // SDL_image sprite;
+        SDL_Image sprite;
         int lane;
 }
