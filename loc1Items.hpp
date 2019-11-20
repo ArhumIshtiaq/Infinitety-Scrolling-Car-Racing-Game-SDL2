@@ -1,14 +1,14 @@
 #pragma once
 #include "Items.hpp"
 
-class itemsPool
+class loc1Items
 {
     Item item1;
     Item item2;
     Item item3;
     Item item4;
     Item item5;
-    static itemsPool getInstance();
+    static loc1Items getInstance();
     Item* aquireItem();
     void releaseItem();
-}
+};
