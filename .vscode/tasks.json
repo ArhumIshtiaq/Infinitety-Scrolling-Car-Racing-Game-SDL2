@@ -11,7 +11,7 @@
                 "-g",
                 // "*.cpp",
                 // "main2.cpp",
-                "*.cpp",
+                "Game.cpp",
                 // "Rect.cpp",
                 // "Line.cpp",
                 // "Shape.cpp",
