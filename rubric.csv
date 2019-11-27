@@ -1,0 +1,20 @@
+Category,Description,Weight,0,1,2
+UML,A complete class diagram is submitted in valid UML 2.0. All class relations are shown. Abstract classes and (pure) virtual functions are indicated as such. ,1,The requirement is not met.,The requirement is partially met.,The requirement is fully met.
+Polymorphism,Polymorphism can be seen in the class diagram.,1,The requirement is not met.,The requirement is partially met.,The requirement is fully met.
+Design Patterns,At least 4 design patterns are evident in the UML.,1,The requirement is not met.,The requirement is partially met.,The requirement is fully met.
+Distribution,The distribution of classes among the team members is indicated through colors and a color key.,1,The requirement is not met.,The requirement is partially met.,The requirement is fully met.
+Scope,5 to 6 class per team member. 1 to 2 less for the team lead.,1,The requirement is not met.,The requirement is partially met.,The requirement is fully met.
+Header,Header files corresponding to the UML files are submitted.,1,The requirement is not met.,The requirement is partially met.,The requirement is fully met.
+Screens,The 3 required screens are submitted.,1,The requirement is not met.,The requirement is partially met.,The requirement is fully met.
+Project info,A project information file is submitted as required.,1,The requirement is not met.,The requirement is partially met.,The requirement is fully met.
+Submission,The submission is complete.,1,The requirement is not met.,The requirement is partially met.,The requirement is fully met.
+
+
+
+
+
+
+
+
+
+
