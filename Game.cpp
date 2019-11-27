@@ -81,6 +81,10 @@ bool init()
                     printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
                     success = false;
                 }
+
+                SDL_Surface* startScreen = IMG_Load();
+                bg = SDL_CreateTextureFromSurface(gRenderer, startScreen);
+                SDL_FreeSurface(startScreen);
             }
         }
     }
