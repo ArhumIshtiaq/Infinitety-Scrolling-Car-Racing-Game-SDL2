@@ -10,19 +10,14 @@
 #include <cstdio>
 #include <iostream>
 #include <string>
+#include <ctime>
 #include <cstdlib>
 
-//Screen dimension constants
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 960;
 
-//Starts up SDL and creates window
 bool init();
-
-//Loads media
 bool loadMedia();
-
-//Frees media and shuts down SDL
 void close();
 
 //Loads individual image as texture
@@ -33,6 +28,12 @@ SDL_Window *gWindow = NULL;
 
 //The window renderer
 SDL_Renderer *gRenderer = NULL;
+
+SDL_Surface *gScreenSurface = NULL;
+
+SDL_Surface *image = NULL;
+
+std::string bg;
 
 bool init()
 {
@@ -47,13 +48,7 @@ bool init()
     }
     else
     {
-        //Set texture filtering to linear
-        if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
-        {
-            printf("Warning: Linear texture filtering not enabled!");
-        }
 
-        //Create window
         gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
         if (gWindow == NULL)
         {
@@ -62,25 +57,13 @@ bool init()
         }
         else
         {
-            //Create renderer for window
-            gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
-            if (gRenderer == NULL)
+            gScreenSurface = SDL_GetWindowSurface(gWindow);
+            //start PNG loading
+            int imgFlags = IMG_INIT_PNG;
+            if (!(IMG_Init(imgFlags) & imgFlags))
             {
-                printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+                printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
                 success = false;
-            }
-            else
-            {
-                //Initialize renderer color
-                SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
-                //Initialize PNG loading
-                int imgFlags = IMG_INIT_PNG;
-                if (!(IMG_Init(imgFlags) & imgFlags))
-                {
-                    printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-                    success = false;
-                }
             }
         }
     }
@@ -90,30 +73,38 @@ bool init()
 
 bool loadMedia()
 {
-    //Loading success mouseClicked
     bool success = true;
-
-    //Nothing to load
+    time_t curr_time;
+    curr_time = time(NULL);
+    tm *tm_local = localtime(&curr_time);
+    std::cout << tm_local->tm_hour << std::endl; 
+    if (tm_local->tm_hour >= 6 && tm_local->tm_hour <= 18)
+    {
+        bg = "daytime.png";
+    }
+    else
+    {
+        bg = "night.png";
+    }
+    std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
+    image = IMG_Load(path.c_str());
     return success;
 }
 
 void close()
 {
-    //Destroy window
     SDL_DestroyRenderer(gRenderer);
     SDL_DestroyWindow(gWindow);
     gWindow = NULL;
     gRenderer = NULL;
-
-    //Quit SDL subsystems
     IMG_Quit();
     SDL_Quit();
 }
 
-SDL_Texture *loadTexture(std::string path)
+SDL_Surface *loadSurface(std::string path)
 {
-    //The final texture
-    SDL_Texture *newTexture = NULL;
+    //The final optimized image
+    SDL_Surface *optimizedSurface = NULL;
 
     //Load image at specified path
     SDL_Surface *loadedSurface = IMG_Load(path.c_str());
@@ -123,23 +114,23 @@ SDL_Texture *loadTexture(std::string path)
     }
     else
     {
-        //Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedSurface);
-        if (newTexture == NULL)
+        //Convert surface to screen format
+        optimizedSurface = SDL_ConvertSurface(loadedSurface, gScreenSurface->format, 0);
+        if (optimizedSurface == NULL)
         {
-            printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+            printf("Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
         }
 
         //Get rid of old loaded surface
         SDL_FreeSurface(loadedSurface);
     }
 
-    return newTexture;
+    return optimizedSurface;
 }
+
 
 int main(int argc, char *argv[])
 {
-    //Start up SDL and create window
     if (!init())
     {
         printf("Failed to initialize!\n");
@@ -147,54 +138,48 @@ int main(int argc, char *argv[])
     else
     {
 
-        if (!loadMedia()) //Load media
+        if (!loadMedia())
         {
             printf("Failed to load media!\n");
         }
         else
         {
-            bool quit = false; //Main loop controller
-
-            SDL_Event e; //Event handler that takes care of all events
+            bool quit = false;
+            SDL_Event e;
 
             bool mouseClicked = false;
 
-            //While application is running
             while (!quit)
             {
-                //Handle events on queue
+                std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
+                image = loadSurface(path.c_str());
+                SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
+                SDL_UpdateWindowSurface(gWindow);
+                //event handling
                 while (SDL_PollEvent(&e) != 0)
                 {
                     switch (e.type)
                     {
-                        case SDL_KEYDOWN:
-                            switch (e.key.keysym.sym)
-                            {
-                                case SDLK_ESCAPE:
-                                    close();
-                                    return 0;
-                            }
+                    case SDL_KEYDOWN:
+                        switch (e.key.keysym.sym)
+                        {
+                        case SDLK_ESCAPE:
+                            close();
+                            return 0;
+                        }
 
-                        case SDL_WINDOWEVENT:
-                            switch (e.window.event)
-                            {
+                    case SDL_WINDOWEVENT:
+                        switch (e.window.event)
+                        {
 
-                                case SDL_WINDOWEVENT_CLOSE:
-                                    close();
-                                    return 0;
-                            }
-
-                        //Clear screen
-                        SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
-                        SDL_RenderClear(gRenderer);
-
-                        //Update screen
-                        SDL_RenderPresent(gRenderer);
-                        
+                        case SDL_WINDOWEVENT_CLOSE:
+                            close();
+                            return 0;
+                        }
                     }
                 }
             }
-            //Free resources and close SDL
+            //deallocation and closing
             close();
             return 0;
         }
