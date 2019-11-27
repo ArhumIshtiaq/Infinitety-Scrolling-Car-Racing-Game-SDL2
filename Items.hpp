@@ -10,7 +10,7 @@
 
 class Item : public loc1Items, public loc2Items, public loc3Items
 {
-    SDL_Image sprite;
+    SDL_image sprite;
     int score;
     Item();
 };
