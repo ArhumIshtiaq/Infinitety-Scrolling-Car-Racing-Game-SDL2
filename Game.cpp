@@ -12,13 +12,12 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
-#include "Game.hpp"
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 960;
 
 bool init();
-bool loadMedia();
+bool loadBG();
 void close();
 
 //Loads individual image as texture
@@ -31,8 +30,6 @@ SDL_Window *gWindow = NULL;
 SDL_Renderer *gRenderer = NULL;
 
 SDL_Surface *gScreenSurface = NULL;
-
-SDL_Texture* stScreen = NULL;
 
 SDL_Surface *image = NULL;
 
@@ -60,51 +57,36 @@ bool init()
         }
         else
         {
-            gRenderer = SDL_CreateRenderer(gWindow, -1, 0);
-
-            if (gRenderer)
+            gScreenSurface = SDL_GetWindowSurface(gWindow);
+            //start PNG loading
+            int imgFlags = IMG_INIT_PNG;
+            if (!(IMG_Init(imgFlags) & imgFlags))
             {
-                SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
-                success = true;
-            }
-            else
-            {
+                printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
                 success = false;
             }
-            //start PNG loading
-            // int imgFlags = IMG_INIT_PNG;
-            // if (!(IMG_Init(imgFlags) & imgFlags))
-            // {
-            //     printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-            //     success = false;
-            // }
-            SDL_Surface* startScreen = IMG_Load("marium 3 (1).jpg");
-            stScreen = SDL_CreateTextureFromSurface(gRenderer, startScreen);
-            SDL_FreeSurface(startScreen);
         }
-        
     }
 
     return success;
 }
 
-bool loadMedia()
+bool loadBG()
 {
     bool success = true;
     time_t curr_time;
     curr_time = time(NULL);
     tm *tm_local = localtime(&curr_time);
-    std::cout << tm_local->tm_hour << std::endl; 
+    std::cout << tm_local->tm_hour << std::endl;
     if (tm_local->tm_hour >= 6 && tm_local->tm_hour <= 18)
     {
-        bg = "daytime.png";
+        bg = "BGD.jpg";
     }
     else
     {
-        bg = "night.png";
+        bg = "BGN.jpg";
     }
-    std::string path = "marium 3 (1).jpg";
-    // std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
+    std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
     image = IMG_Load(path.c_str());
     return success;
 }
@@ -146,7 +128,6 @@ SDL_Surface *loadSurface(std::string path)
     return optimizedSurface;
 }
 
-
 int main(int argc, char *argv[])
 {
     if (!init())
@@ -156,7 +137,7 @@ int main(int argc, char *argv[])
     else
     {
 
-        if (!loadMedia())
+        if (!loadBG())
         {
             printf("Failed to load media!\n");
         }
@@ -169,8 +150,7 @@ int main(int argc, char *argv[])
 
             while (!quit)
             {
-                std::string path = "marium 3 (1).jpg";
-                // std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
+                std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
                 image = loadSurface(path.c_str());
                 SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
                 SDL_UpdateWindowSurface(gWindow);
@@ -186,7 +166,6 @@ int main(int argc, char *argv[])
                             close();
                             return 0;
                         }
-
                     case SDL_WINDOWEVENT:
                         switch (e.window.event)
                         {
