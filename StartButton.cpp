@@ -2,10 +2,7 @@
 
 void StartButton::click(SDL_Rect*)
 {
+    show();
+    click();
 
-}
-
-void StartButton::setText("Start")
-{
-    
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_image.h>
+#include "Game.hpp"
 
 class Menu
 {
@@ -40,6 +41,7 @@ void Menu::show(SDL_Surface* screen)
                     {
                         SDL_FreeSurface(menus[i]);
                     }
+                    clean();
                     break;
                 case SDL_MOUSEBUTTONDOWN:
                     x = MenuEvent.button.x;
@@ -51,6 +53,7 @@ void Menu::show(SDL_Surface* screen)
                             {
                                 selected[i] = 1;
                                 event = label[i];
+                                click(event, gRenderer)
 
                             }
                         }
@@ -61,7 +64,7 @@ void Menu::show(SDL_Surface* screen)
 
 }
 
-void Menu::click(string event, SDL_Renderer* gRenderer)
+void Menu::click(string event, SDL_Renderer* Renderer)
 {
     switch (event)
         case "Start":
@@ -69,5 +72,10 @@ void Menu::click(string event, SDL_Renderer* gRenderer)
         case "How to Play":
             break;
         case "Exit":
+            for (int i = 0; i < numMenu; i++)
+                {
+                    SDL_FreeSurface(menus[i]);
+                }
+            clean(); 
             break;
 }
