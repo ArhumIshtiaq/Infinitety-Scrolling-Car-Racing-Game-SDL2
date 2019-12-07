@@ -17,7 +17,7 @@ const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 960;
 
 bool init();
-bool loadMedia();
+bool loadBG();
 void close();
 
 //Loads individual image as texture
@@ -71,20 +71,20 @@ bool init()
     return success;
 }
 
-bool loadMedia()
+bool loadBG()
 {
     bool success = true;
     time_t curr_time;
     curr_time = time(NULL);
     tm *tm_local = localtime(&curr_time);
-    std::cout << tm_local->tm_hour << std::endl; 
+    std::cout << tm_local->tm_hour << std::endl;
     if (tm_local->tm_hour >= 6 && tm_local->tm_hour <= 18)
     {
-        bg = "daytime.png";
+        bg = "BGD.jpg";
     }
     else
     {
-        bg = "night.png";
+        bg = "BGN.jpg";
     }
     std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
     image = IMG_Load(path.c_str());
@@ -128,7 +128,6 @@ SDL_Surface *loadSurface(std::string path)
     return optimizedSurface;
 }
 
-
 int main(int argc, char *argv[])
 {
     if (!init())
@@ -138,7 +137,7 @@ int main(int argc, char *argv[])
     else
     {
 
-        if (!loadMedia())
+        if (!loadBG())
         {
             printf("Failed to load media!\n");
         }
@@ -167,7 +166,6 @@ int main(int argc, char *argv[])
                             close();
                             return 0;
                         }
-
                     case SDL_WINDOWEVENT:
                         switch (e.window.event)
                         {
