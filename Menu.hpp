@@ -6,7 +6,8 @@ class Menu
 {
     public:
         SDL_Surface* background;
-        void click(SDL_Renderer*);
+        string event;
+        void click(string, SDL_Renderer*);
         void show(SDL_Surface*);
 };
 
@@ -49,6 +50,8 @@ void Menu::show(SDL_Surface* screen)
                             if(!selected[i])
                             {
                                 selected[i] = 1;
+                                event = label[i];
+
                             }
                         }
                     break;
@@ -56,4 +59,15 @@ void Menu::show(SDL_Surface* screen)
         }
     }
 
+}
+
+void Menu::click(string event, SDL_Renderer* gRenderer)
+{
+    switch (event)
+        case "Start":
+            break;
+        case "How to Play":
+            break;
+        case "Exit":
+            break;
 }
