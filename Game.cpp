@@ -12,6 +12,7 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
+#include "Game.hpp"
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 960;
@@ -30,6 +31,8 @@ SDL_Window *gWindow = NULL;
 SDL_Renderer *gRenderer = NULL;
 
 SDL_Surface *gScreenSurface = NULL;
+
+SDL_Texture* stScreen = NULL;
 
 SDL_Surface *image = NULL;
 
@@ -57,15 +60,29 @@ bool init()
         }
         else
         {
-            gScreenSurface = SDL_GetWindowSurface(gWindow);
-            //start PNG loading
-            int imgFlags = IMG_INIT_PNG;
-            if (!(IMG_Init(imgFlags) & imgFlags))
+            gRenderer = SDL_CreateRenderer(gWindow, -1, 0);
+
+            if (gRenderer)
             {
-                printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+                SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
+                success = true;
+            }
+            else
+            {
                 success = false;
             }
+            //start PNG loading
+            // int imgFlags = IMG_INIT_PNG;
+            // if (!(IMG_Init(imgFlags) & imgFlags))
+            // {
+            //     printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+            //     success = false;
+            // }
+            SDL_Surface* startScreen = IMG_Load("marium 3 (1).jpg");
+            stScreen = SDL_CreateTextureFromSurface(gRenderer, startScreen);
+            SDL_FreeSurface(startScreen);
         }
+        
     }
 
     return success;
@@ -86,7 +103,8 @@ bool loadBG()
     {
         bg = "BGN.jpg";
     }
-    std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
+    std::string path = "marium 3 (1).jpg";
+    // std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
     image = IMG_Load(path.c_str());
     return success;
 }
@@ -150,7 +168,8 @@ int main(int argc, char *argv[])
 
             while (!quit)
             {
-                std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
+                std::string path = "marium 3 (1).jpg";
+                // std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
                 image = loadSurface(path.c_str());
                 SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
                 SDL_UpdateWindowSurface(gWindow);
