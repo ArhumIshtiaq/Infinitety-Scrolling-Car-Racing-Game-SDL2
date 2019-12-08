@@ -86,7 +86,7 @@ bool loadBG()
     {
         bg = "BGN.jpg";
     }
-    std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
+    std::string path = "Assets/" + bg;
     image = IMG_Load(path.c_str());
     return success;
 }
@@ -150,7 +150,7 @@ int main(int argc, char *argv[])
 
             while (!quit)
             {
-                std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
+                std::string path = "Assets/startscreen.jpg";
                 image = loadSurface(path.c_str());
                 SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
                 SDL_UpdateWindowSurface(gWindow);
