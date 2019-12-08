@@ -1,7 +1,7 @@
-#include "StartButton.hpp"
+#include "ExitButton.hpp"
 
 
-void StartButton::click(SDL_Rect*)
+void ExitButton::click(SDL_Rect*)
 {
     int x, y;
     SDL_Event event;
@@ -18,12 +18,11 @@ void StartButton::click(SDL_Rect*)
                 case SDL_MOUSEBUTTONDOWN:
                     x = event.button.x;
                     y = event.motion.y;
-                    if(x>=13 && x<=256 && y>=553 && y<=643)
+                    if(x>=13 && x<=256 && y>=791 && y<=881)
                     {
-                        image = loadSurface("Assets/BGD.jpg");
-                        SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
-                        SDL_UpdateWindowSurface(gWindow);
+                        close();
                     }
+                    break;
 
             }
         }

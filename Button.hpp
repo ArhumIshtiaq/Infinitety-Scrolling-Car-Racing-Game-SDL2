@@ -7,6 +7,5 @@
 class Button
 {
     SDL_Surface* button;
-    virtual void show();
     virtual void click(SDL_Rect*);
 };
