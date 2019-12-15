@@ -6,6 +6,8 @@
 #include <SDL.h>
 #include <SDL_image.h>
 
+// #include "Game.hpp"
+
 #include <cmath>
 #include <cstdio>
 #include <iostream>
@@ -15,10 +17,6 @@
 
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 960;
-
-bool init();
-bool loadBG();
-void close();
 
 //Loads individual image as texture
 SDL_Texture *loadTexture(std::string path);
@@ -70,6 +68,57 @@ bool init()
 
     return success;
 }
+
+// bool loadMedia()
+// {
+//     //Loading success flag
+//     bool success = true;
+
+//     //Load sprite sheet texture
+//     if (!gSpriteSheetTexture.loadFromFile("C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//bgn.png", gWindow, gRenderer))
+//     {
+//         printf("Failed to load sprite sheet texture!\n");
+//         success = false;
+//     }
+//     else
+//     {
+//         //Set top left sprite
+//         gSpriteClips[0].x = 0;
+//         gSpriteClips[0].y = 0;
+//         gSpriteClips[0].w = 1280;
+//         gSpriteClips[0].h = 960;
+
+//         //Set top right sprite
+//         gSpriteClips[1].x = 1280;
+//         gSpriteClips[1].y = 0;
+//         gSpriteClips[1].w = 1280;
+//         gSpriteClips[1].h = 960;
+
+//         //Set bottom left sprite
+//         gSpriteClips[2].x = 2560;
+//         gSpriteClips[2].y = 0;
+//         gSpriteClips[2].w = 1280;
+//         gSpriteClips[2].h = 960;
+
+//         //Set bottom right sprite
+//         gSpriteClips[3].x = 3840;
+//         gSpriteClips[3].y = 0;
+//         gSpriteClips[3].w = 1280;
+//         gSpriteClips[3].h = 960;
+
+//         gSpriteClips[4].x = 5120;
+//         gSpriteClips[4].y = 0;
+//         gSpriteClips[4].w = 1280;
+//         gSpriteClips[4].h = 960;
+
+//         gSpriteClips[5].x = 6500;
+//         gSpriteClips[5].y = 0;
+//         gSpriteClips[5].w = 1280;
+//         gSpriteClips[5].h = 960;
+//     }
+
+//     return success;
+// }
 
 bool loadBG()
 {
@@ -150,10 +199,32 @@ int main(int argc, char *argv[])
 
             while (!quit)
             {
-                std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//" + bg;
+
+                std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//bgn1.png";
                 image = loadSurface(path.c_str());
                 SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
                 SDL_UpdateWindowSurface(gWindow);
+                SDL_Delay(100);
+                path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//bgn2.png";
+                image = loadSurface(path.c_str());
+                SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
+                SDL_UpdateWindowSurface(gWindow);
+                SDL_Delay(100);
+                path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//bgn3.png";
+                image = loadSurface(path.c_str());
+                SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
+                SDL_UpdateWindowSurface(gWindow);
+                SDL_Delay(100);
+                path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//bgn4.png";
+                image = loadSurface(path.c_str());
+                SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
+                SDL_UpdateWindowSurface(gWindow);
+                SDL_Delay(100);
+                path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//bgn5.png";
+                image = loadSurface(path.c_str());
+                SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
+                SDL_UpdateWindowSurface(gWindow);
+                SDL_Delay(100);
                 //event handling
                 while (SDL_PollEvent(&e) != 0)
                 {
