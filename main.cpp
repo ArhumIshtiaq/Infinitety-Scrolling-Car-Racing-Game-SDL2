@@ -19,7 +19,7 @@ int main(int argc, char **argv)
     int frameTime;
 
     game *Game = new game();
-    Game->init("CRAZY TAXI v2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, false);
+    Game->init("CRAZY TAXI v2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     while (Game->running())
     {
