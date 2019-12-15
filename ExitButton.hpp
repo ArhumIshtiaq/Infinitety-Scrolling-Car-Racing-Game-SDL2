@@ -6,7 +6,7 @@
 #include "Button.hpp"
 #include "Game.cpp"
 
-class StartButton : public Button 
+class ExitButton : public Button 
 {
     void click(SDL_Rect*);
 };
