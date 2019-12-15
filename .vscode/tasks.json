@@ -9,9 +9,16 @@
             "command": "g++",
             "args": [
                 "-g",
-                "*.cpp",
+                 "*.cpp",
                 // "main2.cpp",
-                //"Game.cpp",
+                //"game.cpp",
+                //"main.cpp",
+                //"game.cpp",
+                //"textureManager.cpp",
+                //"object.cpp",
+                //"Player.cpp",
+               // "game.cpp",
+                //"game.hpppp",
                 // "Rect.cpp",
                 // "Line.cpp",
                 // "Shape.cpp",
@@ -33,7 +40,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "problemMatcher": "$tsc"
+            "problemMatcher": "$gcc"
         }
-    ]G
+    ]
 }

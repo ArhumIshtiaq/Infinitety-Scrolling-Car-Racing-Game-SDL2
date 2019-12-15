@@ -1,26 +1,31 @@
 #pragma once
-#include <SDL.h>
+#include "SDL.h"
 #include <SDL_image.h>
-#include "texture.hpp"
+#include <iostream>
+#include <time.h>
 
-class Game
+using namespace std;
+class game
 {
 public:
+    game();
+    ~game();
+
+    void init(const char *title, int posAtX, int posAtY, int height, int width);
+    void update();
+    void render();
+    void clean();
+    void HandleEvents();
+    bool running();
+    bool getStartScreen();
+    bool getPaused();
+    void levelChanged();
+
+private:
+    bool startScreen;
+    bool paused;
+    string currentScreen;
     bool isRunning;
-    SDL_Renderer *renderer;
     SDL_Window *window;
-
-
-
-    static int obj_count;
-    // void init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen);
-    // void handleEvents();
-    // void update();
-    bool loadMedia();
-    // void render();
-    // void clean();
-    // bool running();
-    bool init();
-    bool loadBG();
-    void close();
+    SDL_Renderer *renderer;
 };

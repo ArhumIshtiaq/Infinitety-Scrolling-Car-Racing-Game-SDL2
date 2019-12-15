@@ -1,24 +1,33 @@
 #pragma once
-#include <iostream>
+#include "gameObjects.hpp"
+#include "trafficList.hpp"
+#include "perkList.hpp"
 
-class Player
-{ 
-    private:
-    static Player* player; 
-    SDL_image sprite();
-    Player() {}
-  
-    public:
-    static Player getInstance() 
-    { 
-        if (player == NULL) 
-            player = new Player(); 
-        return *player; 
-    } 
+class player : public gameObjects
+{
+private:
+    trafficList *totalObstacles;
+    perkList *totalPowers;
+    int health;
+    float speed;
 
-    bool checkCollision();
-    void Jump();
-    void moveLeft();
-    void moveRight();
-    void collectItem();
+    //powerups attributes
+    Uint32 speedTimer;
+    Uint32 sheildTimer;
+
+    bool sheild;
+
+    void collisionDetection();
+    void normalize();
+    void activateSpeed();
+    void activateSheild();
+
+public:
+    int getHealth();
+    int getSpeed();
+    player(const char *texturepath, SDL_Renderer *ren, int x, int y, trafficList *allobjects, perkList *allpows);
+    virtual void update() override;
+    void move(string direction);
+
+    ~player();
 };

@@ -1,256 +1,285 @@
-/*This source code copyrighted by Lazy Foo' Productions (2004-2015)
-  and may not be redistributed without written permission.*/
+#include "game.hpp"
+#include "textureManager.hpp"
+#include "gameObjects.hpp"
+#include "player.hpp"
+#include "traffic.hpp"
+#include "trafficList.hpp"
+#include "perkList.hpp"
+#include "itemFactory.hpp"
 
-//Using SDL, SDL_image, standard IO, math, and strings
+game::game()
+{
+    paused = true;
+    startScreen = true;
+    currentScreen = "selectStart";
+}
 
-#include <SDL.h>
-#include <SDL_image.h>
-
-// #include "Game.hpp"
-
-#include <cmath>
-#include <cstdio>
-#include <iostream>
-#include <string>
-#include <ctime>
-#include <cstdlib>
-
-const int SCREEN_WIDTH = 1280;
-const int SCREEN_HEIGHT = 960;
-
-//Loads individual image as texture
-SDL_Texture *loadTexture(std::string path);
-
-//The window we'll be rendering to
-SDL_Window *gWindow = NULL;
-
-//The window renderer
-SDL_Renderer *gRenderer = NULL;
-
-SDL_Surface *gScreenSurface = NULL;
-
-SDL_Surface *image = NULL;
-
+player *Player;
+trafficList *allTraffic = new trafficList;
+perkList *allPerks = new perkList;
+SDL_Texture *backgroundTexture;
+SDL_Rect backgroundRect, srcRect;
+const Uint8 *keyState;
+itemFactory *allItems;
 std::string bg;
+time_t currentTime = time(NULL);
+tm *localTime = localtime(&currentTime);
 
-bool init()
+void game::init(const char *title, int posAtX, int posAtY, int width, int height)
 {
-    //Initialization mouseClicked
-    bool success = true;
-
-    //Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_INIT_EVERYTHING)
     {
-        printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-        success = false;
+        window = SDL_CreateWindow("Crazy Taxi v2", posAtX, posAtY, width, height, 0);
+        isRunning = true;
+        renderer = SDL_CreateRenderer(window, -1, 0);
+
+        if (window)
+        {
+            cout << "Window has been initialized!\n";
+        }
+
+        if (renderer)
+        {
+            cout << "Renderer has been created!\n";
+        }
     }
     else
     {
+        isRunning = false;
+    }
 
-        gWindow = SDL_CreateWindow("SDL Tutorial", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-        if (gWindow == NULL)
+    if (localTime->tm_hour >= 6 && localTime->tm_hour <= 18)
+    {
+        bg = "assets/bgd.png";
+    }
+    else
+    {
+        bg = "assets/bgn.png";
+    }
+
+    backgroundTexture = textureManager::Loadtexture(bg.c_str(), renderer);
+    srcRect.w = 800;
+    srcRect.h = 400;
+    backgroundRect.x = backgroundRect.y = 0;
+    backgroundRect.h = 600;
+    backgroundRect.w = srcRect.w;
+    srcRect.y = 0;
+
+    Player = new player("assets/player.png", renderer, 400, 500, allTraffic, allPerks);
+    Player->setSize(60, 30);
+    allItems = new itemFactory(allTraffic, allPerks, renderer);
+}
+
+void game::HandleEvents()
+{
+    SDL_Event event;
+    SDL_PollEvent(&event);
+    switch (event.type)
+    {
+    case SDL_QUIT:
+        isRunning = false;
+        break;
+    default:
+        break;
+    }
+    keyState = SDL_GetKeyboardState(NULL);
+
+    if (!getStartScreen())
+    {
+        if ((keyState[SDL_SCANCODE_D] || keyState[SDL_SCANCODE_RIGHT]) && Player->posAtX < 480)
         {
-            printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
-            success = false;
+            Player->move("right");
         }
-        else
+        if ((keyState[SDL_SCANCODE_A] || keyState[SDL_SCANCODE_LEFT]) && Player->posAtX > 300)
         {
-            gScreenSurface = SDL_GetWindowSurface(gWindow);
-            //start PNG loading
-            int imgFlags = IMG_INIT_PNG;
-            if (!(IMG_Init(imgFlags) & imgFlags))
+            Player->move("left");
+        }
+        if ((keyState[SDL_SCANCODE_S] || keyState[SDL_SCANCODE_DOWN]) && Player->posAtY < 530)
+        {
+            Player->move("down");
+        }
+        if ((keyState[SDL_SCANCODE_W] || keyState[SDL_SCANCODE_UP]) && Player->posAtY > 0)
+        {
+            Player->move("up");
+        }
+        if (keyState[SDL_SCANCODE_P])
+        {
+            currentScreen == "paused";
+            startScreen = true;
+            paused = !paused;
+        };
+
+    }
+    else
+    {
+        bool keyDown = false;
+        switch (event.type)
+        {
+        case SDL_KEYDOWN:
+            if (!keyDown)
             {
-                printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-                success = false;
-            }
-        }
-    }
-
-    return success;
-}
-
-// bool loadMedia()
-// {
-//     //Loading success flag
-//     bool success = true;
-
-//     //Load sprite sheet texture
-//     if (!gSpriteSheetTexture.loadFromFile("C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//bgn.png", gWindow, gRenderer))
-//     {
-//         printf("Failed to load sprite sheet texture!\n");
-//         success = false;
-//     }
-//     else
-//     {
-//         //Set top left sprite
-//         gSpriteClips[0].x = 0;
-//         gSpriteClips[0].y = 0;
-//         gSpriteClips[0].w = 1280;
-//         gSpriteClips[0].h = 960;
-
-//         //Set top right sprite
-//         gSpriteClips[1].x = 1280;
-//         gSpriteClips[1].y = 0;
-//         gSpriteClips[1].w = 1280;
-//         gSpriteClips[1].h = 960;
-
-//         //Set bottom left sprite
-//         gSpriteClips[2].x = 2560;
-//         gSpriteClips[2].y = 0;
-//         gSpriteClips[2].w = 1280;
-//         gSpriteClips[2].h = 960;
-
-//         //Set bottom right sprite
-//         gSpriteClips[3].x = 3840;
-//         gSpriteClips[3].y = 0;
-//         gSpriteClips[3].w = 1280;
-//         gSpriteClips[3].h = 960;
-
-//         gSpriteClips[4].x = 5120;
-//         gSpriteClips[4].y = 0;
-//         gSpriteClips[4].w = 1280;
-//         gSpriteClips[4].h = 960;
-
-//         gSpriteClips[5].x = 6500;
-//         gSpriteClips[5].y = 0;
-//         gSpriteClips[5].w = 1280;
-//         gSpriteClips[5].h = 960;
-//     }
-
-//     return success;
-// }
-
-bool loadBG()
-{
-    bool success = true;
-    time_t curr_time;
-    curr_time = time(NULL);
-    tm *tm_local = localtime(&curr_time);
-    std::cout << tm_local->tm_hour << std::endl;
-    if (tm_local->tm_hour >= 6 && tm_local->tm_hour <= 18)
-    {
-        bg = "BGD.jpg";
-    }
-    else
-    {
-        bg = "BGN.jpg";
-    }
-    std::string path = "Assets/" + bg;
-    image = IMG_Load(path.c_str());
-    return success;
-}
-
-void close()
-{
-    SDL_DestroyRenderer(gRenderer);
-    SDL_DestroyWindow(gWindow);
-    gWindow = NULL;
-    gRenderer = NULL;
-    IMG_Quit();
-    SDL_Quit();
-}
-
-SDL_Surface *loadSurface(std::string path)
-{
-    //The final optimized image
-    SDL_Surface *optimizedSurface = NULL;
-
-    //Load image at specified path
-    SDL_Surface *loadedSurface = IMG_Load(path.c_str());
-    if (loadedSurface == NULL)
-    {
-        printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
-    }
-    else
-    {
-        //Convert surface to screen format
-        optimizedSurface = SDL_ConvertSurface(loadedSurface, gScreenSurface->format, 0);
-        if (optimizedSurface == NULL)
-        {
-            printf("Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
-        }
-
-        //Get rid of old loaded surface
-        SDL_FreeSurface(loadedSurface);
-    }
-
-    return optimizedSurface;
-}
-
-int main(int argc, char *argv[])
-{
-    if (!init())
-    {
-        printf("Failed to initialize!\n");
-    }
-    else
-    {
-
-        if (!loadBG())
-        {
-            printf("Failed to load media!\n");
-        }
-        else
-        {
-            bool quit = false;
-            SDL_Event e;
-
-            bool mouseClicked = false;
-
-            while (!quit)
-            {
-
-                std::string path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//bgn1.png";
-                image = loadSurface(path.c_str());
-                SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
-                SDL_UpdateWindowSurface(gWindow);
-                SDL_Delay(100);
-                path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//bgn2.png";
-                image = loadSurface(path.c_str());
-                SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
-                SDL_UpdateWindowSurface(gWindow);
-                SDL_Delay(100);
-                path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//bgn3.png";
-                image = loadSurface(path.c_str());
-                SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
-                SDL_UpdateWindowSurface(gWindow);
-                SDL_Delay(100);
-                path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//bgn4.png";
-                image = loadSurface(path.c_str());
-                SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
-                SDL_UpdateWindowSurface(gWindow);
-                SDL_Delay(100);
-                path = "C://Users//Arhum Ishtiaq//Desktop//Habib University - Arhum Ishtiaq - ai05182//Fall 2019//OOP//Project//Final Project//Fall-2019-OOP-Final-Project//Assets//bgn5.png";
-                image = loadSurface(path.c_str());
-                SDL_BlitSurface(image, NULL, gScreenSurface, NULL);
-                SDL_UpdateWindowSurface(gWindow);
-                SDL_Delay(100);
-                //event handling
-                while (SDL_PollEvent(&e) != 0)
+                if (currentScreen == "selectStart")
                 {
-                    switch (e.type)
+                    if (keyState[SDL_SCANCODE_DOWN])
                     {
-                    case SDL_KEYDOWN:
-                        switch (e.key.keysym.sym)
-                        {
-                        case SDLK_ESCAPE:
-                            close();
-                            return 0;
-                        }
-                    case SDL_WINDOWEVENT:
-                        switch (e.window.event)
-                        {
-
-                        case SDL_WINDOWEVENT_CLOSE:
-                            close();
-                            return 0;
-                        }
+                        currentScreen = "selectInstructions";
+                    }
+                    if (keyState[SDL_SCANCODE_RETURN])
+                    {
+                        paused = false;
+                        startScreen = false;
                     }
                 }
+                else if (currentScreen == "selectInstructions")
+                {
+                    if (keyState[SDL_SCANCODE_UP])
+                    {
+                        currentScreen = "selectStart";
+                    }
+                    else if (keyState[SDL_SCANCODE_DOWN])
+                    {
+                        currentScreen = "quit";
+                    }
+                    else if (keyState[SDL_SCANCODE_RETURN])
+                    {
+                        currentScreen = "instructions";
+                    }
+                }
+                else if (currentScreen == "quit")
+                {
+                    if (keyState[SDL_SCANCODE_UP])
+                    {
+                        currentScreen = "selectInstructions";
+                    }
+                    else if (keyState[SDL_SCANCODE_RETURN])
+                    {
+                        isRunning = false;
+                    };
+                }
+                else if (currentScreen == "instructions")
+                {
+                    if (keyState[SDL_SCANCODE_RETURN])
+                    {
+                        currentScreen = "selectInstructions";
+                    };
+                }
             }
-            //deallocation and closing
-            close();
-            return 0;
+            keyDown = true;
+            break;
+        case SDL_KEYUP:
+            keyDown = false;
+            break;
+        default:
+            break;
         }
     }
+}
+
+bool game::running()
+{
+    return isRunning;
+}
+
+void game::update()
+{
+    if (!startScreen && !paused)
+    {
+
+        if (srcRect.y > 20)
+        {
+            srcRect.y -= Player->getSpeed()/4;
+            
+        }
+        else
+        {
+            srcRect.y = 200;
+        }
+
+        if (Player->getHealth() <= 0)
+        {
+            isRunning = false;
+        }
+
+        for (int i = 0; i < allTraffic->size(); i++)
+        {
+            allTraffic->at(i)->update();
+        }
+
+        for (int i = 0; i < allPerks->size(); i++)
+        {
+            allPerks->at(i)->update();
+        }
+
+        Player->update();
+
+        allItems->update();
+    }
+}
+
+void game::render()
+{
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, backgroundTexture, &srcRect, &backgroundRect);
+
+    if (getStartScreen())
+    {
+        SDL_Rect fullScreenRect;
+        fullScreenRect.w = 800;
+        fullScreenRect.h = 600;
+        fullScreenRect.x = 0;
+        fullScreenRect.y = 0;
+
+        SDL_Texture *screen;
+
+        if (currentScreen == "selectStart")
+        {
+            screen = textureManager::Loadtexture("assets/start.png", renderer);
+        }
+        else if (currentScreen == "selectInstructions")
+        {
+            screen = textureManager::Loadtexture("assets/instructions.png", renderer);
+        }
+        else if (currentScreen == "quit")
+        {
+            screen = textureManager::Loadtexture("assets/exit.png", renderer);
+        }
+        else if (currentScreen == "instructions")
+        {
+            screen = textureManager::Loadtexture("assets/nn.png", renderer);
+        }
+        else if (currentScreen == "paused")
+        {
+            screen = textureManager::Loadtexture("assets/paused.png", renderer);
+        }
+
+        SDL_RenderCopy(renderer, screen, NULL, &fullScreenRect);
+    }
+    else
+    {
+        Player->render();
+        for (int i = 0; i < allTraffic->size(); i++)
+        {
+            allTraffic->at(i)->render();
+        }
+        for (int i = 0; i < allPerks->size(); i++)
+        {
+            allPerks->at(i)->render();
+        }
+    };
+    SDL_RenderPresent(renderer);
+}
+
+bool game::getStartScreen()
+{
+    return startScreen;
+}
+
+bool game::getPaused()
+{
+    return paused;
+}
+
+void game::levelChanged()
+{
+
 }
