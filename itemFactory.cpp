@@ -25,10 +25,18 @@ void itemFactory::update()
 {
     if (perkSpeed < SDL_GetTicks())
     {
-        perk *tempPerk = new perk(*perkAssets[rand() % 2]);
+        perk *tempPerk = new perk(*perkAssets[1]);
         tempPerk->setXPos(lanes[rand() % 3]);
         pList->append(new perk(*tempPerk));
-        perkSpeed = SDL_GetTicks() + 4000;
+        perkSpeed = SDL_GetTicks() + 5000;
+    }
+
+    if (checkpointSpeed < SDL_GetTicks())
+    {
+        perk *tempPerk = new perk(*perkAssets[0]);
+        tempPerk->setXPos(lanes[rand() % 3]);
+        pList->append(new perk(*tempPerk));
+        checkpointSpeed = SDL_GetTicks() + 300000;
     }
 
     if (trafficSpeed < SDL_GetTicks())
@@ -36,7 +44,7 @@ void itemFactory::update()
         Traffic *tempTraffic = new Traffic(*obstacleAssets[rand() % 3]);
         tempTraffic->setXPos(lanes[rand() % 3]);
         tList->append(tempTraffic);
-        trafficSpeed = SDL_GetTicks() + 300;
+        trafficSpeed = SDL_GetTicks() + 500;
     }
 
     freeMem();

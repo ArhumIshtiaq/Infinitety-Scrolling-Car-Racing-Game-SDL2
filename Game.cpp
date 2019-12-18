@@ -90,7 +90,6 @@ void game::HandleEvents()
     {
         if (playing == false)
         {
-
             playing = true;
         }
 
@@ -110,16 +109,15 @@ void game::HandleEvents()
         {
             Player->move("up");
         }
+        if (keyState[SDL_SCANCODE_P])
+        {
+            currentScreen == "paused";
+            paused = true;
+        };
     }
     else
     {
         bool keyDown = false;
-        if (keyState[SDL_SCANCODE_P])
-        {
-            currentScreen == "paused";
-            startScreen = false;
-            paused = !paused;
-        };
         switch (event.type)
         {
         case SDL_KEYDOWN:

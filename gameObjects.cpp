@@ -2,8 +2,8 @@
 
 void gameObjects::update()
 {
-    GOd.y = posAtY;
-    GOd.x = posAtX;
+    objectDimensions.y = posAtY;
+    objectDimensions.x = posAtX;
 }
 
 string gameObjects::getTitle()
@@ -13,18 +13,18 @@ string gameObjects::getTitle()
 
 SDL_Rect *gameObjects::getRect()
 {
-    return &GOd;
+    return &objectDimensions;
 }
 
 void gameObjects::render()
 {
-    SDL_RenderCopy(renderer, objectTexture, NULL, &GOd);
+    SDL_RenderCopy(renderer, objectTexture, NULL, &objectDimensions);
 }
 
 void gameObjects::setSize(int x, int y)
 {
-    GOd.h = x;
-    GOd.w = y;
+    objectDimensions.h = x;
+    objectDimensions.w = y;
 }
 
 void gameObjects::setXPos(float x)

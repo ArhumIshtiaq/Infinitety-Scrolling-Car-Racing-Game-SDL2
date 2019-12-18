@@ -16,7 +16,8 @@ private:
     float timedelay;
     Uint32 trafficSpeed = 0;
     int trafficGenFactor = 1000;
-    Uint32 perkSpeed = 0;
+    Uint32 perkSpeed = 5000;
+    Uint32 checkpointSpeed = 300000;
     SDL_Renderer *ren;
 
     void initializeAssets();

@@ -10,7 +10,7 @@ protected:
    SDL_Renderer *renderer;
    string type;
 
-   SDL_Rect GOcrop, GOd;
+   SDL_Rect GOcrop, objectDimensions;
 
 public:
    int posAtX;

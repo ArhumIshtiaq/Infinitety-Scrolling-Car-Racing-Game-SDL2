@@ -6,8 +6,8 @@ Traffic::Traffic(const char *texturepath, SDL_Renderer *ren, int x, int y)
     objectTexture = textureManager::loadTexture(texturepath, renderer);
     posAtX = x;
     posAtY = y;
-    GOd.h = 60;
-    GOd.w = 30;
+    objectDimensions.h = 60;
+    objectDimensions.w = 30;
     type = "Traffic";
 }
 
@@ -29,6 +29,6 @@ void Traffic::setDamage(int num)
 void Traffic::update()
 {
     posAtY += rand()%5 + 5;
-    GOd.y = posAtY;
-    GOd.x = posAtX;
+    objectDimensions.y = posAtY;
+    objectDimensions.x = posAtX;
 }

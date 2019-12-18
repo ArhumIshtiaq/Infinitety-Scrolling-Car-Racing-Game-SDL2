@@ -9,8 +9,8 @@ player::player(const char *texturepath, SDL_Renderer *ren, int x, int y, traffic
     posAtX = x;
     posAtY = y;
     score = 0;
-    GOd.h = 60;
-    GOd.w = 30;
+    objectDimensions.h = 60;
+    objectDimensions.w = 30;
     health = 100;
     speed = 8;
     sheild = false;
@@ -30,21 +30,21 @@ int player::getSpeed()
 
 void player::update()
 {
-    GOd.y = posAtY;
-    GOd.x = posAtX;
+    objectDimensions.y = posAtY;
+    objectDimensions.x = posAtX;
     collisionDetection();
     if (health <= 0)
     {
         cout << "Game Over!" << endl;
     }
-    score = (SDL_GetTicks() / 750 );
+    score = (SDL_GetTicks() / 750);
 }
 
 void player::collisionDetection()
 {
     for (int i = 0; i < totalObstacles->size(); i++)
     {
-        if (SDL_HasIntersection(&GOd, totalObstacles->at(i)->getRect()))
+        if (SDL_HasIntersection(&objectDimensions, totalObstacles->at(i)->getRect()))
         {
             if (!sheild)
                 health -= totalObstacles->at(i)->effect();
@@ -55,7 +55,7 @@ void player::collisionDetection()
     }
     for (int i = 0; i < totalPowers->size(); i++)
     {
-        if (SDL_HasIntersection(&GOd, totalPowers->at(i)->getRect()))
+        if (SDL_HasIntersection(&objectDimensions, totalPowers->at(i)->getRect()))
         {
             if (totalPowers->at(i)->getspecial() == "shield")
             {
@@ -99,8 +99,7 @@ void player::move(string direction)
 void player::activateSpeed()
 {
     cout << "SPEED POWERUP" << endl;
-    speed = this->speed * 2;
-    speedTimer = SDL_GetTicks() + 5000;
+    speed = this->speed * 1.1;
 }
 
 void player::activateSheild()
@@ -122,10 +121,7 @@ void player::resetScore()
 
 void player::normalize()
 {
-    if (speedTimer < SDL_GetTicks())
-    {
-        speed = 8;
-    }
+
     if (sheildTimer < SDL_GetTicks() && sheild)
     {
         setSize(60, 30);

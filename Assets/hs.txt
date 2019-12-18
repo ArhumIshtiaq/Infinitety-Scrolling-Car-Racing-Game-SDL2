@@ -1,0 +1,33 @@
+std::ifstream hs_file_r;
+std::ofstream hs_file_w;
+int highscore
+
+
+
+hs_file_r.open("assets/hs.txt");
+std::string line; 
+getline(stat_file_r, line);
+if (!line.empty()) 
+{
+    highscore = std::stoi(line);
+    if (highscore < Player->getScore())
+    {
+        hs_file_w.open("Assets//hs_file.txt", std::ios::trunc);
+        hs_file_w << Player->getScore();
+        hs_file_w.close();
+    }
+    {
+        std::ostringstream oss;
+        oss << "Highscore: "+highscore;
+        dataTexture = textureManager::loadText(oss.str().c_str(), color, 25, renderer);
+        SDL_RenderCopy(renderer, dataTexture, NULL, &dataRect);
+    }
+    SDL_DestroyTexture(dataRect);
+    {
+        std::ostringstream oss;
+        oss << "Score: "+highscore;
+        dataTexture = textureManager::loadText(oss.str().c_str(), color, 25, renderer);
+        SDL_RenderCopy(renderer, dataTexture, NULL, &dataRect);
+    }
+}
+hs_file_r.close();

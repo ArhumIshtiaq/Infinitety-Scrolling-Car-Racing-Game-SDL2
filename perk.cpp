@@ -6,16 +6,16 @@ perk::perk(const char *texturepath, SDL_Renderer *ren, int x, int y)
     objectTexture = textureManager::loadTexture(texturepath, renderer);
     posAtX = x;
     posAtY = y;
-    GOd.h = 32;
-    GOd.w = 32;
+    objectDimensions.h = 32;
+    objectDimensions.w = 32;
     type = "perk";
 }
 
 void perk::update()
 {
     posAtY += verticalspeed;
-    GOd.y = posAtY;
-    GOd.x = posAtX;
+    objectDimensions.y = posAtY;
+    objectDimensions.x = posAtX;
 }
 
 string perk::getspecial()
