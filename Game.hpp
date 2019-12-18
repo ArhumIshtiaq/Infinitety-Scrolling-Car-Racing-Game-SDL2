@@ -23,6 +23,7 @@ public:
     void levelChanged();
 
 private:
+    static game *instance;
     bool startScreen;
     bool paused;
     bool playing;
@@ -32,4 +33,6 @@ private:
     bool isRunning;
     SDL_Window *window;
     SDL_Renderer *renderer;
+
+    static game *getInstance();
 };

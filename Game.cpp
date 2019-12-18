@@ -8,11 +8,18 @@
 #include "itemFactory.hpp"
 #include <iostream>
 
+game *game::instance = new game();
+
 game::game()
 {
     paused = true;
     startScreen = true;
     currentScreen = "selectStart";
+}
+
+game *game::getInstance()
+{
+    return instance;
 }
 
 player *Player;
