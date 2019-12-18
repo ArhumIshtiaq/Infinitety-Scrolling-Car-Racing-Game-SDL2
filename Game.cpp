@@ -1,4 +1,4 @@
-#include "Game.hpp"
+#include "game.hpp"
 #include "textureManager.hpp"
 #include "gameObjects.hpp"
 #include "player.hpp"
@@ -6,8 +6,7 @@
 #include "trafficList.hpp"
 #include "perkList.hpp"
 #include "itemFactory.hpp"
-#include <sstream>
-
+#include <iostream>
 
 game::game()
 {
@@ -59,7 +58,7 @@ void game::init(const char *title, int posAtX, int posAtY, int width, int height
         bg = "assets/bgn.png";
     }
 
-    backgroundTexture = textureManager::Loadtexture(bg.c_str(), renderer);
+    backgroundTexture = textureManager::loadTexture(bg.c_str(), renderer);
     srcRect.w = 800;
     srcRect.h = 400;
     backgroundRect.x = backgroundRect.y = 0;
@@ -70,6 +69,7 @@ void game::init(const char *title, int posAtX, int posAtY, int width, int height
     Player = new player("assets/player.png", renderer, 400, 500, allTraffic, allPerks);
     Player->setSize(60, 30);
     allItems = new itemFactory(allTraffic, allPerks, renderer);
+    playing = false;
 }
 
 void game::HandleEvents()
@@ -86,8 +86,14 @@ void game::HandleEvents()
     }
     keyState = SDL_GetKeyboardState(NULL);
 
-    if (!getStartScreen())
+    if (!getPaused())
     {
+        if (playing == false)
+        {
+
+            playing = true;
+        }
+
         if ((keyState[SDL_SCANCODE_D] || keyState[SDL_SCANCODE_RIGHT]) && Player->posAtX < 480)
         {
             Player->move("right");
@@ -104,17 +110,16 @@ void game::HandleEvents()
         {
             Player->move("up");
         }
-        if (keyState[SDL_SCANCODE_P])
-        {
-            currentScreen == "paused";
-            startScreen = true;
-            paused = !paused;
-        };
-
     }
     else
     {
         bool keyDown = false;
+        if (keyState[SDL_SCANCODE_P])
+        {
+            currentScreen == "paused";
+            startScreen = false;
+            paused = !paused;
+        };
         switch (event.type)
         {
         case SDL_KEYDOWN:
@@ -140,14 +145,14 @@ void game::HandleEvents()
                     }
                     else if (keyState[SDL_SCANCODE_DOWN])
                     {
-                        currentScreen = "quit";
+                        currentScreen = "exit";
                     }
                     else if (keyState[SDL_SCANCODE_RETURN])
                     {
                         currentScreen = "instructions";
                     }
                 }
-                else if (currentScreen == "quit")
+                else if (currentScreen == "exit")
                 {
                     if (keyState[SDL_SCANCODE_UP])
                     {
@@ -164,6 +169,15 @@ void game::HandleEvents()
                     {
                         currentScreen = "selectInstructions";
                     };
+                }
+                else if (currentScreen == "gameover")
+                {
+                    if (keyState[SDL_SCANCODE_RETURN])
+                    {
+                        paused = false;
+                        Player->reset();
+                        allItems->freeMem();
+                    }
                 }
             }
             keyDown = true;
@@ -184,13 +198,12 @@ bool game::running()
 
 void game::update()
 {
-    if (!startScreen && !paused)
+    if (!getPaused())
     {
 
         if (srcRect.y > 20)
         {
-            srcRect.y -= Player->getSpeed()/4;
-            
+            srcRect.y -= Player->getSpeed() / 4;
         }
         else
         {
@@ -199,7 +212,10 @@ void game::update()
 
         if (Player->getHealth() <= 0)
         {
-            isRunning = false;
+            currentScreen = "gameover";
+            paused = true;
+            Player->reset();
+            playing = false;
         }
 
         for (int i = 0; i < allTraffic->size(); i++)
@@ -213,7 +229,6 @@ void game::update()
         }
 
         Player->update();
-
         allItems->update();
     }
 }
@@ -223,7 +238,7 @@ void game::render()
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, backgroundTexture, &srcRect, &backgroundRect);
 
-    if (getStartScreen())
+    if (getPaused())
     {
         SDL_Rect fullScreenRect;
         fullScreenRect.w = 800;
@@ -235,31 +250,27 @@ void game::render()
 
         if (currentScreen == "selectStart")
         {
-            screen = textureManager::Loadtexture("assets/start.png", renderer);
+            screen = textureManager::loadTexture("assets/start.png", renderer);
         }
         else if (currentScreen == "selectInstructions")
         {
-            screen = textureManager::Loadtexture("assets/instructions.png", renderer);
+            screen = textureManager::loadTexture("assets/instructions.png", renderer);
         }
-        else if (currentScreen == "quit")
+        else if (currentScreen == "exit")
         {
-            screen = textureManager::Loadtexture("assets/exit.png", renderer);
+            screen = textureManager::loadTexture("assets/exit.png", renderer);
         }
         else if (currentScreen == "instructions")
         {
-            screen = textureManager::Loadtexture("assets/nn.png", renderer);
+            screen = textureManager::loadTexture("assets/nn.png", renderer);
+        }
+        else if (currentScreen == "gameover")
+        {
+            screen = textureManager::loadTexture("assets/gameover.png", renderer);
         }
         else if (currentScreen == "paused")
         {
-            screen = textureManager::Loadtexture("assets/paused.png", renderer);
-        }
-        else if (currentScreen == "instructions")
-        {
-            int textSize = 11;
-            SDL_Color textColor = { 0, 0, 0};
-            std::ostringstream oss;
-            oss << Player->health;
-            screen = textureManager::LoadtextureFromText(oss.str().c_str(), textColor, textSize, renderer);
+            screen = textureManager::loadTexture("assets/pause.png", renderer);
         }
 
         SDL_RenderCopy(renderer, screen, NULL, &fullScreenRect);
@@ -275,7 +286,32 @@ void game::render()
         {
             allPerks->at(i)->render();
         }
-    };
+
+        SDL_Color color = {255, 255, 255};
+
+        dataRect.w = 70;
+        dataRect.h = 50;
+        dataRect.x = 20;
+        dataRect.y = 0;
+
+        {
+            std::ostringstream oss;
+            oss << Player->getScore();
+            dataTexture = textureManager::loadText(oss.str().c_str(), color, 25, renderer);
+            SDL_RenderCopy(renderer, dataTexture, NULL, &dataRect);
+        }
+
+        SDL_DestroyTexture(dataTexture);
+
+        dataRect.x = 720;
+
+        {
+            std::ostringstream oss;
+            oss << Player->getHealth();
+            dataTexture = textureManager::loadText(oss.str().c_str(), color, 25, renderer);
+            SDL_RenderCopy(renderer, dataTexture, NULL, &dataRect);
+        }
+    }
     SDL_RenderPresent(renderer);
 }
 
@@ -291,5 +327,4 @@ bool game::getPaused()
 
 void game::levelChanged()
 {
-
 }

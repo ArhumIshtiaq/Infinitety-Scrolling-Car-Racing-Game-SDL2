@@ -21,10 +21,10 @@ private:
 
     void initializeAssets();
     void collisionDetection();
-    void freeMem();
     int increaseTrafficSpeed();
 
 public:
+    void freeMem();
     itemFactory(trafficList *Traffic, perkList *powerups, SDL_Renderer *renderer);
     void update();
 };

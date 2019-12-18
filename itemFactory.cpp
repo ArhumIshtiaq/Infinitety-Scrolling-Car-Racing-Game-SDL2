@@ -36,7 +36,7 @@ void itemFactory::update()
         Traffic *tempTraffic = new Traffic(*obstacleAssets[rand() % 3]);
         tempTraffic->setXPos(lanes[rand() % 3]);
         tList->append(tempTraffic);
-        trafficSpeed = SDL_GetTicks() + increaseTrafficSpeed();
+        trafficSpeed = SDL_GetTicks() + 300;
     }
 
     freeMem();

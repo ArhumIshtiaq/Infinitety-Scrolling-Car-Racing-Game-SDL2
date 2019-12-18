@@ -1,12 +1,10 @@
 #pragma once
 
-#include "Game.hpp"
-#include <SDL_ttf.h>
+#include "game.hpp"
 
 class textureManager
 {
 public:
-    static SDL_Texture *Loadtexture(const char *filepath, SDL_Renderer *ren);
-    static SDL_Texture* LoadtextureFromText (const char* textToRender, SDL_Color textColor, int textSize, SDL_Renderer* ren);
-    ~TextureManager();
+    static SDL_Texture *loadTexture(const char *filepath, SDL_Renderer *ren);
+    static SDL_Texture *loadText(const char *textToRender, SDL_Color color, int fontSize, SDL_Renderer *ren);
 };

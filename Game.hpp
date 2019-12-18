@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <iostream>
 #include <time.h>
+#include <sstream>
 
 using namespace std;
 class game
@@ -24,7 +25,10 @@ public:
 private:
     bool startScreen;
     bool paused;
+    bool playing;
     string currentScreen;
+    SDL_Rect dataRect;
+    SDL_Texture *dataTexture;
     bool isRunning;
     SDL_Window *window;
     SDL_Renderer *renderer;

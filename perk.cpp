@@ -3,7 +3,7 @@
 perk::perk(const char *texturepath, SDL_Renderer *ren, int x, int y)
 {
     renderer = ren;
-    objectTexture = textureManager::Loadtexture(texturepath, renderer);
+    objectTexture = textureManager::loadTexture(texturepath, renderer);
     posAtX = x;
     posAtY = y;
     GOd.h = 32;

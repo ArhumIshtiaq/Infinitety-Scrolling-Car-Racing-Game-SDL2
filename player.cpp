@@ -1,13 +1,14 @@
-#include "Player.hpp"
+#include "player.hpp"
 
 player::player(const char *texturepath, SDL_Renderer *ren, int x, int y, trafficList *allobtacles, perkList *allpows)
 {
     totalObstacles = allobtacles;
     totalPowers = allpows;
     renderer = ren;
-    objectTexture = textureManager::Loadtexture(texturepath, renderer);
+    objectTexture = textureManager::loadTexture(texturepath, renderer);
     posAtX = x;
     posAtY = y;
+    score = 0;
     GOd.h = 60;
     GOd.w = 30;
     health = 100;
@@ -32,10 +33,11 @@ void player::update()
     GOd.y = posAtY;
     GOd.x = posAtX;
     collisionDetection();
-    if (health < 0)
+    if (health <= 0)
     {
         cout << "Game Over!" << endl;
     }
+    score = (SDL_GetTicks() / 750 );
 }
 
 void player::collisionDetection()
@@ -55,11 +57,10 @@ void player::collisionDetection()
     {
         if (SDL_HasIntersection(&GOd, totalPowers->at(i)->getRect()))
         {
-            // for powerups
             if (totalPowers->at(i)->getspecial() == "shield")
             {
                 activateSheild();
-                objectTexture = textureManager::Loadtexture("assets/shielded.png", renderer);
+                objectTexture = textureManager::loadTexture("assets/shielded.png", renderer);
                 setSize(66, 33);
                 totalPowers->removeAt(i);
                 break;
@@ -98,7 +99,7 @@ void player::move(string direction)
 void player::activateSpeed()
 {
     cout << "SPEED POWERUP" << endl;
-    speed = 15;
+    speed = this->speed * 2;
     speedTimer = SDL_GetTicks() + 5000;
 }
 
@@ -107,6 +108,16 @@ void player::activateSheild()
     cout << "SHIELD POWERUP" << endl;
     sheild = true;
     sheildTimer = SDL_GetTicks() + 5000;
+}
+
+int player::getScore()
+{
+    return score;
+}
+
+void player::resetScore()
+{
+    score = 0;
 }
 
 void player::normalize()
@@ -118,9 +129,17 @@ void player::normalize()
     if (sheildTimer < SDL_GetTicks() && sheild)
     {
         setSize(60, 30);
-        objectTexture = textureManager::Loadtexture("assets/Player.png", renderer);
+        objectTexture = textureManager::loadTexture("assets/Player.png", renderer);
         sheild = false;
     }
+}
+
+void player::reset()
+{
+    resetScore();
+    health = 100;
+    speed = 8;
+    sheild = false;
 }
 
 player::~player(){};
