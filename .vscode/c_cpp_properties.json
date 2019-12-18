@@ -5,6 +5,7 @@
             "includePath": [
                 "C://SDL2-2.0.10//x86_64-w64-mingw32//include//SDL2",
                 "C://SDL2_image-2.0.5//x86_64-w64-mingw32//include//SDL2",
+                "C://SDL2_ttf-2.0.15//i686-w64-mingw32//include//SDL2",
                 "${workspaceFolder}/**"
             ],
             "defines": [
@@ -20,6 +21,7 @@
                 "path": [
                     "C://SDL2-2.0.10//x86_64-w64-mingw32//include//SDL2",
                     "C://SDL2_image-2.0.5//x86_64-w64-mingw32//include//SDL2",
+                    "C://SDL2_ttf-2.0.15//x86_64-w64-mingw32//include//SDL2",
                     "${workspaceFolder}/**"
                 ]
             }
