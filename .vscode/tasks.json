@@ -10,18 +10,6 @@
             "args": [
                 "-g",
                  "*.cpp",
-                // "main2.cpp",
-                //"game.cpp",
-                //"main.cpp",
-                //"game.cpp",
-                //"textureManager.cpp",
-                //"object.cpp",
-                //"Player.cpp",
-               // "game.cpp",
-                //"game.hpppp",
-                // "Rect.cpp",
-                // "Line.cpp",
-                // "Shape.cpp",
                 "-I",
                 "C://SDL2-2.0.10//x86_64-w64-mingw32//include//SDL2",
                 "-I",
@@ -38,7 +26,8 @@
                 "-lSDL2main",
                 "-lSDL2",
                 "-lopengl32",
-                "-lSDL2_image"
+                "-lSDL2_image",
+                "-lSDL2_ttf"
             ],
             "group": {
                 "kind": "build",

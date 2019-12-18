@@ -1,4 +1,4 @@
-#include "game.hpp"
+#include "Game.hpp"
 #include "textureManager.hpp"
 #include "gameObjects.hpp"
 #include "player.hpp"
@@ -6,6 +6,8 @@
 #include "trafficList.hpp"
 #include "perkList.hpp"
 #include "itemFactory.hpp"
+#include <sstream>
+
 
 game::game()
 {
@@ -250,6 +252,14 @@ void game::render()
         else if (currentScreen == "paused")
         {
             screen = textureManager::Loadtexture("assets/paused.png", renderer);
+        }
+        else if (currentScreen == "instructions")
+        {
+            int textSize = 11;
+            SDL_Color textColor = { 0, 0, 0};
+            std::ostringstream oss;
+            oss << Player->health;
+            screen = textureManager::LoadtextureFromText(oss.str().c_str(), textColor, textSize, renderer);
         }
 
         SDL_RenderCopy(renderer, screen, NULL, &fullScreenRect);

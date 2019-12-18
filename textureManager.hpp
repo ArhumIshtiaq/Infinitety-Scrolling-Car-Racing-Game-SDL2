@@ -1,6 +1,6 @@
 #pragma once
 
-#include "game.hpp"
+#include "Game.hpp"
 #include <SDL_ttf.h>
 
 class textureManager

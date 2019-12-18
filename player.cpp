@@ -1,4 +1,4 @@
-#include "player.hpp"
+#include "Player.hpp"
 
 player::player(const char *texturepath, SDL_Renderer *ren, int x, int y, trafficList *allobtacles, perkList *allpows)
 {
