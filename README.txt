@@ -27,7 +27,7 @@ Polymorphism is implemented: gameObject is a parent class that has many child cl
 At least 3 design patterns are implemented: itemFactory is an object pool that has perks and traffic cars that are reused during the game. gameObject is a factory. Game is a singleton.
 At least 1 menu with working buttons is implemented: The game has a start menu from which the user can choose to start the game, move to the game instructions or exit the game. The game over menu gives the player an option to restart.
 Operator Overloading is used: Not used
-File I/O is incorporated: Not used
+File I/O is incorporated: To store and update highscore
 
 Team Contributions:
 Arhum: Game, player
