@@ -21,7 +21,6 @@ public:
    virtual void update();
    virtual void render();
    virtual void setSize(int x, int y);
-   string getTitle();
    virtual SDL_Rect *getRect();
    virtual void setXPos(float x);
    virtual void setYPos(float y);

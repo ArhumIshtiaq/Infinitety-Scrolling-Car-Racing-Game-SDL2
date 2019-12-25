@@ -6,7 +6,10 @@
 #include "trafficList.hpp"
 #include "perkList.hpp"
 #include "itemFactory.hpp"
+#include <fstream>
+#include <sstream>
 #include <iostream>
+#include <string>
 
 game *game::instance = new game();
 
@@ -140,6 +143,7 @@ void game::HandleEvents()
                     {
                         paused = false;
                         startScreen = false;
+                        currentScreen = "paused";
                     }
                 }
                 else if (currentScreen == "selectInstructions")
@@ -181,7 +185,16 @@ void game::HandleEvents()
                     {
                         paused = false;
                         Player->reset();
-                        allItems->freeMem();
+                        allItems->resetTrafficSpeed();
+                        allItems->deleteAllItems();
+                        currentScreen = "paused";
+                    }
+                }
+                else if (currentScreen == "paused")
+                {
+                    if (keyState[SDL_SCANCODE_RETURN])
+                    {
+                        paused = false;
                     }
                 }
             }
@@ -217,9 +230,15 @@ void game::update()
 
         if (Player->getHealth() <= 0)
         {
+            if (Player->getScore() > stoi(loadHighScore("assets/hs.txt")))
+            {
+                saveScore("assets/hs.txt", Player->getScore());
+            }
             currentScreen = "gameover";
             paused = true;
             Player->reset();
+            allItems->freeMem();
+            resetTime();
             playing = false;
         }
 
@@ -232,8 +251,14 @@ void game::update()
         {
             allPerks->at(i)->update();
         }
-
+        Player->setScore(getTime() * (Player->getSpeed() / 5));
+        int oldSpeed = Player->getSpeed();
         Player->update();
+        int newSpeed = Player->getSpeed();
+        if (newSpeed > oldSpeed)
+        {
+            allItems->increaseTrafficSpeed();
+        }
         allItems->update();
     }
 }
@@ -297,7 +322,18 @@ void game::render()
         dataRect.w = 70;
         dataRect.h = 50;
         dataRect.x = 20;
-        dataRect.y = 0;
+        dataRect.y = 50;
+
+        {
+            std::ostringstream oss;
+            oss << getTime();
+            dataTexture = textureManager::loadText(oss.str().c_str(), color, 25, renderer);
+            SDL_RenderCopy(renderer, dataTexture, NULL, &dataRect);
+        }
+
+        SDL_DestroyTexture(dataTexture);
+
+        dataRect.x = 720;
 
         {
             std::ostringstream oss;
@@ -309,10 +345,23 @@ void game::render()
         SDL_DestroyTexture(dataTexture);
 
         dataRect.x = 720;
+        dataRect.y = 0;
 
         {
             std::ostringstream oss;
             oss << Player->getHealth();
+            dataTexture = textureManager::loadText(oss.str().c_str(), color, 25, renderer);
+            SDL_RenderCopy(renderer, dataTexture, NULL, &dataRect);
+        }
+
+        SDL_DestroyTexture(dataTexture);
+
+        dataRect.w = 200;
+        dataRect.x = 20;
+
+        {
+            std::ostringstream oss;
+            oss << "Highscore: " + loadHighScore("assets/hs.txt");
             dataTexture = textureManager::loadText(oss.str().c_str(), color, 25, renderer);
             SDL_RenderCopy(renderer, dataTexture, NULL, &dataRect);
         }
@@ -330,6 +379,41 @@ bool game::getPaused()
     return paused;
 }
 
-void game::levelChanged()
+std::string game::loadHighScore(const char *path)
 {
+    std::string highscore;
+    std::fstream file(path);
+
+    if (file.is_open())
+    {
+        getline(file, highscore);
+    };
+
+    file.close();
+
+    return highscore;
+};
+
+void game::saveScore(const char *path, float score)
+{
+    std::ostringstream oss;
+    oss << score;
+    std::fstream file(path);
+
+    if (file.is_open())
+    {
+        file << oss.str().c_str();
+    };
+
+    file.close();
+};
+
+Uint32 game::getTime()
+{
+    return (SDL_GetTicks() - startTime) / 1000;
+}
+
+void game::resetTime()
+{
+    startTime = SDL_GetTicks();
 }

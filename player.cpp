@@ -1,21 +1,26 @@
 #include "player.hpp"
 
-player::player(const char *texturepath, SDL_Renderer *ren, int x, int y, trafficList *allobtacles, perkList *allpows)
+player::player(const char *texturepath, SDL_Renderer *ren, int x, int y, trafficList *allObs, perkList *allPerks)
 {
-    totalObstacles = allobtacles;
-    totalPowers = allpows;
+    totalObstacles = allObs;
+    totalPowers = allPerks;
     renderer = ren;
     objectTexture = textureManager::loadTexture(texturepath, renderer);
     posAtX = x;
     posAtY = y;
-    score = 0;
     objectDimensions.h = 60;
     objectDimensions.w = 30;
     health = 100;
+    score = 0;
     speed = 8;
     sheild = false;
     type = "Player";
     cout << "Player health:" << health << endl;
+}
+
+void player::setScore(int x)
+{
+    score = x;
 }
 
 int player::getHealth()
@@ -37,7 +42,6 @@ void player::update()
     {
         cout << "Game Over!" << endl;
     }
-    score = (SDL_GetTicks() / 750);
 }
 
 void player::collisionDetection()
@@ -69,6 +73,7 @@ void player::collisionDetection()
             {
                 activateSpeed();
                 totalPowers->removeAt(i);
+
                 break;
             }
         }
@@ -80,26 +85,42 @@ void player::move(string direction)
 {
     if (direction == "right")
     {
-        posAtX += speed;
+        posAtX += (speed / 2);
+        if (posAtX >= 480)
+        {
+            posAtX = 479;
+        }
     }
     else if (direction == "left")
     {
-        posAtX -= speed;
+        posAtX -= (speed / 2);
+        if (posAtX <= 300)
+        {
+            posAtX = 301;
+        }
     }
     else if (direction == "up")
     {
         posAtY -= (speed / 3) * 2;
+        if (posAtY < 0)
+        {
+            posAtY = 0;
+        }
     }
     else if (direction == "down")
     {
         posAtY += (speed / 3) * 2;
+        if (posAtY >= 530)
+        {
+            posAtY = 529;
+        }
     }
 }
 
 void player::activateSpeed()
 {
     cout << "SPEED POWERUP" << endl;
-    speed = this->speed * 1.1;
+    speed = this->speed * 1.2;
 }
 
 void player::activateSheild()

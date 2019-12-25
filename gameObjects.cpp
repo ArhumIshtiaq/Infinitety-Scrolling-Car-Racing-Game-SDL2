@@ -6,11 +6,6 @@ void gameObjects::update()
     objectDimensions.x = posAtX;
 }
 
-string gameObjects::getTitle()
-{
-    return type;
-}
-
 SDL_Rect *gameObjects::getRect()
 {
     return &objectDimensions;

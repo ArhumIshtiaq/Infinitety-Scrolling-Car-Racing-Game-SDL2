@@ -21,6 +21,10 @@ public:
     bool getStartScreen();
     bool getPaused();
     void levelChanged();
+    std::string loadHighScore(const char* filename);
+    void saveScore(const char* filename, float score);
+    Uint32 getTime();
+    void resetTime();
 
 private:
     static game *instance;
@@ -33,6 +37,9 @@ private:
     bool isRunning;
     SDL_Window *window;
     SDL_Renderer *renderer;
+    Uint32 currTime = 0;
+    Uint32 startTime = 0;
+    int score = 0;
 
     static game *getInstance();
 };

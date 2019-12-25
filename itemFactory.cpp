@@ -1,11 +1,11 @@
 #include "itemFactory.hpp"
 #include <time.h>
 
-itemFactory::itemFactory(trafficList *traffic, perkList *pows, SDL_Renderer *renderer)
+itemFactory::itemFactory(trafficList *traffic, perkList *perks, SDL_Renderer *renderer)
 {
     ren = renderer;
     tList = traffic;
-    pList = pows;
+    pList = perks;
     timedelay = 5;
 
     perkAssets[0] = new perk("assets/speed.png", ren, rand() % 300 + 300, -10);
@@ -28,7 +28,7 @@ void itemFactory::update()
         perk *tempPerk = new perk(*perkAssets[1]);
         tempPerk->setXPos(lanes[rand() % 3]);
         pList->append(new perk(*tempPerk));
-        perkSpeed = SDL_GetTicks() + 5000;
+        perkSpeed = SDL_GetTicks() + 6000;
     }
 
     if (checkpointSpeed < SDL_GetTicks())
@@ -36,7 +36,7 @@ void itemFactory::update()
         perk *tempPerk = new perk(*perkAssets[0]);
         tempPerk->setXPos(lanes[rand() % 3]);
         pList->append(new perk(*tempPerk));
-        checkpointSpeed = SDL_GetTicks() + 300000;
+        checkpointSpeed = SDL_GetTicks() + 10000;
     }
 
     if (trafficSpeed < SDL_GetTicks())
@@ -44,7 +44,7 @@ void itemFactory::update()
         Traffic *tempTraffic = new Traffic(*obstacleAssets[rand() % 3]);
         tempTraffic->setXPos(lanes[rand() % 3]);
         tList->append(tempTraffic);
-        trafficSpeed = SDL_GetTicks() + 500;
+        trafficSpeed = SDL_GetTicks() + trafficGenFactor;
     }
 
     freeMem();
@@ -68,11 +68,24 @@ void itemFactory::freeMem()
     }
 }
 
-int itemFactory::increaseTrafficSpeed()
+void itemFactory::deleteAllItems()
 {
-    if (SDL_GetTicks() % 500 == 0)
+    for (int i = 0; i < tList->size(); i++)
     {
-        trafficGenFactor -= 20 * (SDL_GetTicks() / 500);
+        tList->removeAt(i);
     }
-    return trafficGenFactor;
+    for (int i = 0; i < pList->size(); i++)
+    {
+        pList->removeAt(i);
+    }
+}
+
+void itemFactory::increaseTrafficSpeed()
+{
+    trafficGenFactor = trafficGenFactor / 1.2;
 };
+
+void itemFactory::resetTrafficSpeed()
+{
+    trafficGenFactor = 1000;
+}

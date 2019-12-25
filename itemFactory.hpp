@@ -16,15 +16,17 @@ private:
     float timedelay;
     Uint32 trafficSpeed = 0;
     int trafficGenFactor = 1000;
-    Uint32 perkSpeed = 5000;
-    Uint32 checkpointSpeed = 300000;
+    Uint32 perkSpeed = 6000;
+    Uint32 checkpointSpeed = 10000;
     SDL_Renderer *ren;
 
     void initializeAssets();
     void collisionDetection();
-    int increaseTrafficSpeed();
 
 public:
+    void increaseTrafficSpeed();
+    void resetTrafficSpeed();
+    void deleteAllItems();
     void freeMem();
     itemFactory(trafficList *Traffic, perkList *powerups, SDL_Renderer *renderer);
     void update();
