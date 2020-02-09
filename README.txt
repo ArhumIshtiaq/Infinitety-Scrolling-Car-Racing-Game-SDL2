@@ -6,13 +6,6 @@ Packages used:
 SDL_image
 SDL_ttf
 
-Sources:
-https://lazyfoo.net/tutorials/SDL/?fbclid=IwAR0xnTwjOyOfWafjpui50N7sZNSwYeGxR9fNZEYBjwrEofD9CsJtn3_Q9y8
-
-First Progress Video: https://www.youtube.com/watch?v=44tO977slsU
-Final Demo Video: https://youtu.be/ZWHKAznKf48
-Playlist link: https://www.youtube.com/playlist?list=PLhMuZIhlWJUqh0W0VOu7ZwZCWIfGttYhk
-
 Requirements Met:
 Memory is correctly managed: Destructors are made where neccessary and SDL Textures and Surface are destroyed where they are no longer needed, or to be reused.
 Polymorphism is implemented: gameObject is a parent class that has many child classes such as perks, traffic and player, which all have shared attributes and functions that are overloaded as required.
