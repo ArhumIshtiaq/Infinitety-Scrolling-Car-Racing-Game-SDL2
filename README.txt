@@ -8,7 +8,6 @@ Marium Asif ma04450
 Neha Jafry nj05165
 Saad Ahmed sk04293
 
-
 Packages used:
 SDL_image
 SDL_ttf
@@ -18,7 +17,7 @@ https://lazyfoo.net/tutorials/SDL/?fbclid=IwAR0xnTwjOyOfWafjpui50N7sZNSwYeGxR9fN
 
 First Progress Video: https://www.youtube.com/watch?v=44tO977slsU
 Final Demo Video: https://youtu.be/ZWHKAznKf48
-Plalist link: https://www.youtube.com/playlist?list=PLhMuZIhlWJUqh0W0VOu7ZwZCWIfGttYhk
+Playlist link: https://www.youtube.com/playlist?list=PLhMuZIhlWJUqh0W0VOu7ZwZCWIfGttYhk
 UML: https://www.lucidchart.com/invitations/accept/1153822a-533b-4b16-b474-75e8463b72ae
 
 Requirements Met:

@@ -21,8 +21,8 @@ public:
     bool getStartScreen();
     bool getPaused();
     void levelChanged();
-    std::string loadHighScore(const char* filename);
-    void saveScore(const char* filename, float score);
+    std::string loadHighScore(const char *filename);
+    void saveScore(const char *filename, float score);
     Uint32 getTime();
     void resetTime();
 

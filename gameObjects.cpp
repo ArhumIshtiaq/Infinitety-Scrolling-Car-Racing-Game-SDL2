@@ -42,6 +42,7 @@ float gameObjects::getX()
 {
     return posAtX;
 }
+
 float gameObjects::getY()
 {
     return posAtY;
