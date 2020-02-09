@@ -197,6 +197,10 @@ void game::HandleEvents()
                         paused = false;
                     }
                 }
+
+                SDL_Surface* startScreen = IMG_Load();
+                bg = SDL_CreateTextureFromSurface(gRenderer, startScreen);
+                SDL_FreeSurface(startScreen);
             }
             keyDown = true;
             break;
